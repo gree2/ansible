@@ -1,0 +1,16 @@
+[namenode]
+node5
+
+[datanode]
+node4
+node3
+node2
+
+[mac]
+127.0.0.1
+
+[hadoop_cluster]
+node5
+node4
+node3
+node2
