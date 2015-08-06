@@ -1,16 +1,11 @@
 # ansible
 play with ansible
 
-### ping demo
+## ping demo
 
-$ ansible-playbook -i ping.hosts ping.yml 
+1. hosts file
 
-PLAY [local] ****************************************************************** 
+1. ansible.cfg file
 
-TASK: [ping ] ***************************************************************** 
+## uptime demo
 
-ok: [127.0.0.1]
-
-PLAY RECAP ******************************************************************** 
-
-127.0.0.1                  : ok=1    changed=0    unreachable=0    failed=0   
