@@ -1,0 +1,26 @@
+# access by {{ db_primary_host }}
+
+# db_primary_host: app6.example.com
+# db_primary_port: 5432
+# dp_replica_host: app7.example.com
+# db_name: widget_production
+# db_user: widgetuser
+# db_password: 123456
+# rabbitmq_host: app8.example.com
+# rabbitmq_port: 5672
+
+# yaml dict
+# access by {{ db.primary.host }}
+db:
+    user: widgetuser
+    password: 123456
+    name: widget_production
+    primary:
+        host: app6.example.com
+        prot: 5432
+    replica:
+    	host: app7.example.com
+
+rabbitmq:
+	host: app8.example.com
+	port: 5672

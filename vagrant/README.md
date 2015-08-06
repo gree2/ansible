@@ -13,7 +13,13 @@
 
         $ vagrant up
 
-1. get info
+1. get info about ssh port
 
         $ vagrant ssh-config
         # use output to edit `hosts` file
+
+1. get info about network interface
+
+        $ ansible vagrant2 -a "ip addr show dev eth0"
+
+1. [download ubuntu/trusty64](http://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box)
