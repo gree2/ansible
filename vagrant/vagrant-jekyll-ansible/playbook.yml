@@ -1,0 +1,29 @@
+---
+- hosts: all
+  sudo: true
+  tasks:
+
+    - name: update ubuntu sources.list
+      shell: "sed 's@archive.ubuntu.com@mirrors.163.com@' -i /etc/apt/sources.list"
+      shell: "sed 's@archive.canonical.com@mirrors.163.com@' -i /etc/apt/sources.list"
+      shell: "sed 's@security.ubuntu.com@mirrors.163.com@' -i /etc/apt/sources.list"
+
+    - name: update apt
+      apt: update_cache=yes
+
+    - name: install nodejs
+      apt: name=nodejs state=present
+
+    - name: install lynx
+      apt: name=lynx-cur state=present
+
+    - name: install ruby1.9.1-dev
+      apt: name=ruby1.9.1-dev state=present
+
+    - name: update gem sources
+      shell: "gem sources --remove https://rubygems.org/"
+      shell: "gem sources -a http://ruby.taobao.org/"
+      shell: "gem sources -l"
+
+    - name: install jekyll
+      shell: "gem install jekyll"
