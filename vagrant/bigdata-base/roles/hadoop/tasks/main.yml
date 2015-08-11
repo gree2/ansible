@@ -1,13 +1,44 @@
 ---
 # tasks file for hadoop
 - name: create /app/hadoop
-  file: path=/app/hadoop state=directory
+  file: path={{ dir_app_hadoop }} state=directory
 
 - name: create /opt/bigdata
-  file: path=/opt/bigdata state=directory
+  file: path={{ dir_opt_bigdata }} state=directory
 
 - name: unzip hadoop tar ball
   unarchive: >
-    src=/software/hadoop-2.7.0.tar.gz
-    dest=/opt/bigdata
+    src=/software/{{ hadoop_version }}.tar.gz
+    dest={{ dir_opt_bigdata }}
     copy=no
+
+- name: hadoop symbolic link
+  file: >
+    src={{ dir_opt_bigdata }}/{{ hadoop_version }}
+    dest={{ dir_opt_bigdata }}/hadoop
+    state=link
+
+- name: hadoop conf
+  copy: src=core-site.xml dest={{ dir_hadoop_conf }}
+  copy: src=hdfs-site.xml dest={{ dir_hadoop_conf }}
+
+- name: source .bashrc
+  shell: . /home/vagrant/.bashrc
+
+- name: ensure the /home/vagrant/.ssh directory exists
+  file: path=/home/vagrant/.ssh state=directory
+
+- name: known_hosts
+  copy: src=id_rsa dest=/home/vagrant/.ssh/
+  copy: src=id_rsa.pub dest=/home/vagrant/.ssh/
+  copy: src=known_hosts dest=/home/vagrant/.ssh/
+
+# - name: authorized_keys
+#   shell: ls /home/vagrant/.ssh/
+#   # shell: ssh-keygen -t rsa -P ""
+#   shell: cat /home/vagrant/.ssh/id_rsa.pub >> /home/vagrant/.ssh/authorized_keys
+
+- name: format and start nn dn daemon
+  shell: hdfs namenode -format
+  shell: start-dfs.sh
+  shell: hdfs dfs -ls /

@@ -1,2 +1,7 @@
 ---
 # vars file for hadoop
+dir_app_hadoop: /app/hadoop
+dir_opt_bigdata: /opt/bigdata
+dir_hadoop_conf: /opt/bigdata/hadoop/etc/hadoop
+
+hadoop_version: hadoop-2.7.0
