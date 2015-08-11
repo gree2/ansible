@@ -1,0 +1,19 @@
+---
+# tasks file for ubuntu
+- name: update ubuntu sources.list
+  shell: "sed 's@archive.ubuntu.com@mirrors.163.com@' -i /etc/apt/sources.list"
+  shell: "sed 's@archive.canonical.com@mirrors.163.com@' -i /etc/apt/sources.list"
+  shell: "sed 's@security.ubuntu.com@mirrors.163.com@' -i /etc/apt/sources.list"
+
+- name: update apt
+  apt: update_cache=yes
+
+- name: install openjdk-7-jdk
+  apt: name=openjdk-7-jdk state=present
+
+- name: copy configuration file
+  copy: src=.bashrc dest=/home/vagrant/.bashrc
+
+- name: source .bashrc
+  sudo: no
+  shell: . /home/vagrant/.bashrc

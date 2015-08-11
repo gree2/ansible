@@ -1,0 +1,13 @@
+---
+# tasks file for hadoop
+- name: create /app/hadoop
+  file: path=/app/hadoop state=directory
+
+- name: create /opt/bigdata
+  file: path=/opt/bigdata state=directory
+
+- name: unzip hadoop tar ball
+  unarchive: >
+    src=/software/hadoop-2.7.0.tar.gz
+    dest=/opt/bigdata
+    copy=no
