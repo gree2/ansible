@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-vagrant box package bigdata-base
+vagrant package --output  bigdata-base.box

@@ -1,0 +1,20 @@
+# Defaults to the first ethernet interface. Change this to:
+#
+#  iface: eth1
+#
+# ...to override.
+#
+#iface: '{{ ansible_default_ipv4.interface }}'
+
+iface: eth1
+
+mirrors_hostname: mirrors.163.com
+
+hadoop:
+    
+    hadoop_user: hadoop
+    hadoop_password: hadoop
+    hadoop_group: hadoop
+
+    fs_default_name_port: 9000
+    dfs_replication: 1

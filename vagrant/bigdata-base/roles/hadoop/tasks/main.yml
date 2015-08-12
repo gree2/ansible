@@ -1,44 +1,84 @@
 ---
 # tasks file for hadoop
+
+- name: create user hadoop
+  user: >
+    name={{ hadoop.hadoop_user }}
+    password={{ hadoop.hadoop_password }}
+    generate_ssh_key=yes
+    ssh_key_bits=2048
+    ssh_key_file=.ssh/id_rsa
+
+- name: ensure the /home/hadoop/.ssh directory exists
+  file: >
+    path=/home/{{ hadoop.hadoop_user }}/.ssh
+    state=directory
+
+- name: add to authorized_keys
+  shell: "cat /home/{{ hadoop.hadoop_user }}/.ssh/id_rsa.pub >> /home/{{ hadoop.hadoop_user }}/.ssh/authorized_keys"
+  become: yes
+  become_user: "{{ hadoop.hadoop_user }}"
+
 - name: create /app/hadoop
-  file: path={{ dir_app_hadoop }} state=directory
+  file: >
+    path={{ dir_app_hadoop }}
+    state=directory
+    owner={{ hadoop.hadoop_user }}
+    group={{ hadoop.hadoop_group }}
+    recurse=yes
 
 - name: create /opt/bigdata
-  file: path={{ dir_opt_bigdata }} state=directory
+  file: >
+    path={{ dir_opt_bigdata }}
+    state=directory
+    owner={{ hadoop.hadoop_user }}
+    group={{ hadoop.hadoop_group }}
+    recurse=yes
 
 - name: unzip hadoop tar ball
   unarchive: >
     src=/software/{{ hadoop_version }}.tar.gz
     dest={{ dir_opt_bigdata }}
     copy=no
+    owner={{ hadoop.hadoop_user }}
+    group={{ hadoop.hadoop_group }}
 
 - name: hadoop symbolic link
   file: >
     src={{ dir_opt_bigdata }}/{{ hadoop_version }}
     dest={{ dir_opt_bigdata }}/hadoop
     state=link
+    owner={{ hadoop.hadoop_user }}
+    group={{ hadoop.hadoop_group }}
 
 - name: hadoop conf
-  copy: src=core-site.xml dest={{ dir_hadoop_conf }}
-  copy: src=hdfs-site.xml dest={{ dir_hadoop_conf }}
+  template: >
+    src={{ item }}.j2
+    dest={{ dir_hadoop_conf }}/{{ item }}
+    owner={{ hadoop.hadoop_user }}
+    group={{ hadoop.hadoop_group }}
+  with_items:
+    - core-site.xml
+    - hadoop-env.sh
+    - hdfs-site.xml
+    - mapred-site.xml
+    - slaves
+    - yarn-site.xml
+
+- name: copy .bashrc
+  copy: >
+    src=.bashrc
+    dest=/home/{{ hadoop.hadoop_user }}/.bashrc
+    owner={{ hadoop.hadoop_user }}
+    group={{ hadoop.hadoop_group }}
 
 - name: source .bashrc
-  shell: . /home/vagrant/.bashrc
+  shell: >
+    . /home/{{ hadoop.hadoop_user }}/.bashrc
 
-- name: ensure the /home/vagrant/.ssh directory exists
-  file: path=/home/vagrant/.ssh state=directory
-
-- name: known_hosts
-  copy: src=id_rsa dest=/home/vagrant/.ssh/
-  copy: src=id_rsa.pub dest=/home/vagrant/.ssh/
-  copy: src=known_hosts dest=/home/vagrant/.ssh/
-
-# - name: authorized_keys
-#   shell: ls /home/vagrant/.ssh/
-#   # shell: ssh-keygen -t rsa -P ""
-#   shell: cat /home/vagrant/.ssh/id_rsa.pub >> /home/vagrant/.ssh/authorized_keys
-
-- name: format and start nn dn daemon
-  shell: hdfs namenode -format
-  shell: start-dfs.sh
-  shell: hdfs dfs -ls /
+# - name: format and start nn dn daemon
+#   shell: hdfs namenode -format
+#   shell: start-dfs.sh
+#   shell: hdfs dfs -ls /
+#   become: yes
+#   become_user: "{{ hadoop.hadoop_user }}"
