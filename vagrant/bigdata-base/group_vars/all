@@ -8,13 +8,44 @@
 
 iface: eth1
 
-mirrors_hostname: mirrors.163.com
+dir:
 
-hadoop:
+    app_base: /app/hadoop
     
-    hadoop_user: hadoop
-    hadoop_password: hadoop
-    hadoop_group: hadoop
+    install_base: /opt/bigdata
 
-    fs_default_name_port: 9000
-    dfs_replication: 1
+    hadoop: /opt/bigdata/hadoop
+    hadoop_conf: /opt/bigdata/hadoop/etc/hadoop
+
+    hive: /opt/bigdata/hive
+    hive_conf: /opt/bigdata/hive/conf
+    hive_lib: /opt/bigdata/hive/lib
+
+conf:
+
+    mirrors: mirrors.163.com
+
+    hdfs_port: 9000
+    hdfs_replication: 1
+
+    hive_metastore: metastore
+
+version:
+
+    hadoop: hadoop-2.7.0
+
+    hive: apache-hive-1.2.1-bin
+
+    mysql_connector: mysql-connector-java-5.1.35-bin
+
+user:
+
+    hadoop: hadoop
+    hadoop_group: hadoop
+    hadoop_password: hadoop
+
+    hive_mysql: hadoop
+    hive_mysql_password: hadoop
+
+    mysql: root
+    mysql_password: root

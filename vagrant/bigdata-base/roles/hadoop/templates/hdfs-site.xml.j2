@@ -3,7 +3,7 @@
 <configuration>
     <property>
         <name>dfs.replication</name>
-        <value>{{ hadoop.dfs_replication }}</value>
+        <value>{{ conf.hdfs_replication }}</value>
     </property>
     <property>
         <name>dfs.namenode.checkpoint.period</name>
@@ -11,12 +11,12 @@
     </property>
     <property>
         <name>dfs.namenode.name.dir</name>
-        <value>file:///app/hadoop/hdfs/name</value>
+        <value>file://{{ dir.app_base }}/hdfs/name</value>
         <final>true</final>
     </property>
     <property>
         <name>dfs.datanode.data.dir</name>
-        <value>file:///app/hadoop/hdfs/data</value>
+        <value>file://{{ dir.app_base }}/hdfs/data</value>
         <final>true</final>
     </property>
     <property>
@@ -33,6 +33,6 @@
     </property>
     <property>
         <name>dfs.namenode.checkpoint.dir</name>
-        <value>file:///app/hadoop/hdfs/namesecondary</value>
+        <value>file://{{ dir.app_base }}/hdfs/namesecondary</value>
     </property>
 </configuration>

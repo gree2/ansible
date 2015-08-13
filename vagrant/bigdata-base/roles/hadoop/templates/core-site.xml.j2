@@ -3,10 +3,10 @@
 <configuration>
     <property>
         <name>fs.default.name</name>
-        <value>hdfs://singlenode:{{ hadoop.fs_default_name_port }}</value>
+        <value>hdfs://singlenode:{{ conf.hdfs_port }}</value>
     </property>
     <property>
         <name>hadoop.tmp.dir</name>
-        <value>file:///app/hadoop/tmp</value>
+        <value>file://{{ dir.app_base }}/tmp</value>
     </property>
 </configuration>

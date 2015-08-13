@@ -3,4 +3,6 @@
   sudo: true
   roles:
     - ubuntu
+    - mysql
     - hadoop
+    - hive

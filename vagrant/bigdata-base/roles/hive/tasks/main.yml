@@ -1,0 +1,42 @@
+---
+# tasks file for hive
+
+- name: unzip hive tar ball
+  unarchive:
+    src: "/software/{{ version.hive }}.tar.gz"
+    dest: "{{ dir.install_base }}"
+    copy: no
+    owner: "{{ user.hadoop }}"
+    group: "{{ user.hadoop_group }}"
+
+- name: copy mysql connector
+  command: "cp '/software/{{ version.mysql_connector }}.jar' '{{ dir.hive_lib }}'"
+
+- name: hive symbolic link
+  file:
+    src: "{{ dir.install_base }}/{{ version.hive }}"
+    dest: "{{ dir.install_base }}/hive"
+    state: link
+    owner: "{{ user.hadoop }}"
+    group: "{{ user.hadoop_group }}"
+
+- name: hive conf
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ dir.hive_conf }}/{{ item }}"
+    owner: "{{ user.hadoop }}"
+    group: "{{ user.hadoop_group }}"
+  with_items:
+    - hive-site.xml
+
+- name: copy .bashrc
+  copy:
+    src: .bashrc
+    dest: "/home/{{ user.hadoop }}/.bashrc"
+    owner: "{{ user.hadoop }}"
+    group: "{{ user.hadoop_group }}"
+
+- name: source .bashrc
+  shell: . /home/{{ user.hadoop }}/.bashrc
+  become: yes
+  become_user: "{{ user.hadoop }}"
