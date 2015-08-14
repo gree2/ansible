@@ -1,0 +1,29 @@
+---
+# tasks file for ubuntu
+
+- name: update sources.list
+  template: src=sources.list.j2 dest=/etc/apt/sources.list
+
+# - name: get ambari
+#   command: "wget -O {{ conf.list_file }} {{ conf.list_url }}"
+
+- name: copy .bashrc
+  copy:
+    src: ambaribn.list
+    dest: "{{ conf.list_file }}"
+
+# apt-key adv --recv-keys --keyserver keyserver.ubuntu.com B9733A7A07513CAD
+# apt-get update
+# apt-get install ambari-server -y
+
+- name: add apt key
+  apt_key: keyserver=keyserver.ubuntu.com id=B9733A7A07513CAD state=present
+
+- name: update cache
+  apt: update_cache=yes
+
+- name: install ubuntu packages
+  apt: name={{ item }} state=present
+  sudo: yes
+  with_items:
+    - ambari-server

@@ -1,0 +1,16 @@
+# Defaults to the first ethernet interface. Change this to:
+#
+#  iface: eth1
+#
+# ...to override.
+#
+#iface: '{{ ansible_default_ipv4.interface }}'
+
+iface: eth1
+
+conf:
+
+    mirrors: mirrors.163.com
+
+    list_file: /etc/apt/sources.list.d/ambari.list
+    list_url: http://s3.amazonaws.com/dev.hortonworks.com/ambari/ubuntu12/2.x/BUILDS/2.1.0-1409/ambaribn.list
