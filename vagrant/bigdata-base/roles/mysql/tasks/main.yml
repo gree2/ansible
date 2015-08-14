@@ -1,14 +1,6 @@
 ---
 # tasks file for mysql
 
-- name: install mysql
-  apt: name={{ item }} state=present
-  sudo: yes
-  with_items:
-    - mysql-server
-    - mysql-client
-    - python-mysqldb
-
 #- name: copy cnf
 #  copy: src=.my.cnf dest=~/.my.cnf owner=ubuntu mode=0644
 #  sudo: yes

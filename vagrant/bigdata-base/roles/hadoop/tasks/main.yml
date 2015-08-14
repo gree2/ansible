@@ -14,18 +14,19 @@
     path=/home/{{ user.hadoop }}/.ssh
     state=directory
 
-# - name: tell the host about our servers it might want to ssh to
-#   become: yes
-#   become_user: "{{ user.hadoop }}"
-#   known_hosts: >
-#     path='/home/{{ user.hadoop }}/.ssh/known_hosts'
-#     name='singlenode'
-#     key="{{ lookup('file', '/home/{{ user.hadoop }}/.ssh/id_rsa.pub') }}"
-
 - name: add to authorized_keys
   shell: "cat /home/{{ user.hadoop }}/.ssh/id_rsa.pub >> /home/{{ user.hadoop }}/.ssh/authorized_keys"
   become: yes
   become_user: "{{ user.hadoop }}"
+
+- name: add to known_hosts
+  shell: "ssh-keyscan -H {{ item }} >> /home/{{ user.hadoop }}/.ssh/known_hosts"
+  become: yes
+  become_user: "{{ user.hadoop }}"
+  with_items:
+    - "0.0.0.0"
+    - "192.168.100.100"
+    - "singlenode"
 
 - name: create /app/hadoop
   file: >
@@ -85,11 +86,22 @@
   become: yes
   become_user: "{{ user.hadoop }}"
 
-# - name: format and start nn dn daemon
-#   # sudo: true
-#   # sudo_user: "{{ user.hadoop }}"
-#   shell: creates={{ dir.install_base }}/hadoop/{{ version.hadoop }} su - {{ user.hadoop }} -c "hdfs namenode -format -force"
-#   shell: start-dfs.sh
-#   shell: hdfs dfs -ls /
+- name: hadoop namenode format
+  shell: "{{ dir.hadoop }}/bin/hdfs namenode -format -force"
+  become: yes
+  become_user: "{{ user.hadoop }}"
+
+- name: hadoop start nn dn snn daemon
+  shell: "{{ dir.hadoop }}/sbin/start-dfs.sh"
+  become: yes
+  become_user: "{{ user.hadoop }}"
+
+- name: jps
+  shell: /usr/bin/jps
+  become: yes
+  become_user: "{{ user.hadoop }}"
+
+# - name: hdfs dfs -ls /
+#   shell: "{{ dir.hadoop }}/bin/hdfs dfs -ls /"
 #   become: yes
 #   become_user: "{{ user.hadoop }}"

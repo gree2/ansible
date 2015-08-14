@@ -1,16 +1,20 @@
 ---
 # tasks file for ubuntu
+
 - name: update sources.list
-  # shell: "sed 's@archive.ubuntu.com@mirrors.163.com@' -i /etc/apt/sources.list"
-  # shell: "sed 's@archive.canonical.com@mirrors.163.com@' -i /etc/apt/sources.list"
-  # shell: "sed 's@security.ubuntu.com@mirrors.163.com@' -i /etc/apt/sources.list"
   template: src=sources.list.j2 dest=/etc/apt/sources.list
 
 - name: update cache
   apt: update_cache=yes
 
-- name: install openjdk-7-jdk
-  apt: name=openjdk-7-jdk state=present
+- name: install ubuntu packages
+  apt: name={{ item }} state=present
+  sudo: yes
+  with_items:
+    - openjdk-7-jdk
+    - mysql-server
+    - mysql-client
+    - python-mysqldb
 
 - name: create the hosts file for all machines
   template: src=etc/hosts.j2 dest=/etc/hosts

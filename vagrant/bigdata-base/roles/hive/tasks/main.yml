@@ -9,9 +9,6 @@
     owner: "{{ user.hadoop }}"
     group: "{{ user.hadoop_group }}"
 
-- name: copy mysql connector
-  command: "cp '/software/{{ version.mysql_connector }}.jar' '{{ dir.hive_lib }}'"
-
 - name: hive symbolic link
   file:
     src: "{{ dir.install_base }}/{{ version.hive }}"
@@ -19,6 +16,9 @@
     state: link
     owner: "{{ user.hadoop }}"
     group: "{{ user.hadoop_group }}"
+
+- name: copy mysql connector
+  command: "cp '/software/{{ version.mysql_connector }}.jar' '{{ dir.hive_lib }}'"
 
 - name: hive conf
   template:
