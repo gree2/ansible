@@ -1,0 +1,12 @@
+create table employee
+(
+name string,
+work_place array<string>,
+sex_age struct<sex:string, age:int>,
+skills_score map<string,int>,
+depart_title map<string,array<string>>
+)
+row format delimited
+fields terminated by '|'
+collection items terminated by ','
+map keys terminated by ':';

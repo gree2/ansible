@@ -25,12 +25,14 @@
   become_user: "{{ user.hadoop }}"
   with_items:
     - "0.0.0.0"
+    - "127.0.0.1"
     - "192.168.100.100"
+    - "localhost"
     - "singlenode"
 
 - name: create /app/hadoop
   file: >
-    path={{ dir.app_base }}
+    path={{ dir.app_hadoop }}
     state=directory
     owner={{ user.hadoop }}
     group={{ user.hadoop_group }}
@@ -75,11 +77,11 @@
     - yarn-site.xml
 
 - name: copy .bashrc
-  copy: >
-    src=.bashrc
-    dest=/home/{{ user.hadoop }}/.bashrc
-    owner={{ user.hadoop }}
-    group={{ user.hadoop_group }}
+  template:
+    src: .bashrc
+    dest: /home/{{ user.hadoop }}/.bashrc
+    owner: "{{ user.hadoop }}"
+    group: "{{ user.hadoop_group }}"
 
 - name: source .bashrc
   shell: . /home/{{ user.hadoop }}/.bashrc
@@ -96,12 +98,22 @@
   become: yes
   become_user: "{{ user.hadoop }}"
 
-- name: jps
-  shell: /usr/bin/jps
+- name: hdfs dfs -mkdir /tmp
+  command: "{{ dir.hadoop }}/bin/hdfs dfs -mkdir /tmp"
   become: yes
   become_user: "{{ user.hadoop }}"
 
-# - name: hdfs dfs -ls /
-#   shell: "{{ dir.hadoop }}/bin/hdfs dfs -ls /"
-#   become: yes
-#   become_user: "{{ user.hadoop }}"
+- name: hdfs dfs -mkdir /user/hive/warehouse
+  command: "{{ dir.hadoop }}/bin/hdfs dfs -mkdir -p /user/hive/warehouse"
+  become: yes
+  become_user: "{{ user.hadoop }}"
+
+- name: hdfs dfs -chmod g+w /tmp
+  command: "{{ dir.hadoop }}/bin/hdfs dfs -chmod g+w /tmp"
+  become: yes
+  become_user: "{{ user.hadoop }}"
+
+- name: hdfs dfs -chmod g+w /user/hive/warehouse
+  command: "{{ dir.hadoop }}/bin/hdfs dfs -chmod g+w /user/hive/warehouse"
+  become: yes
+  become_user: "{{ user.hadoop }}"

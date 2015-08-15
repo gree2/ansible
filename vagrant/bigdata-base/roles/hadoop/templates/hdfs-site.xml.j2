@@ -11,12 +11,12 @@
     </property>
     <property>
         <name>dfs.namenode.name.dir</name>
-        <value>file://{{ dir.app_base }}/hdfs/name</value>
+        <value>file://{{ dir.app_hadoop }}/hdfs/name</value>
         <final>true</final>
     </property>
     <property>
         <name>dfs.datanode.data.dir</name>
-        <value>file://{{ dir.app_base }}/hdfs/data</value>
+        <value>file://{{ dir.app_hadoop }}/hdfs/data</value>
         <final>true</final>
     </property>
     <property>
@@ -33,6 +33,6 @@
     </property>
     <property>
         <name>dfs.namenode.checkpoint.dir</name>
-        <value>file://{{ dir.app_base }}/hdfs/namesecondary</value>
+        <value>file://{{ dir.app_hadoop }}/hdfs/namesecondary</value>
     </property>
 </configuration>

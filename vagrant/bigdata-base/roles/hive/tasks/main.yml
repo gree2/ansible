@@ -9,6 +9,12 @@
     owner: "{{ user.hadoop }}"
     group: "{{ user.hadoop_group }}"
 
+- name: chown hive install folder
+  file: 
+    path: "{{ dir.install_base }}/{{ version.hive }}"
+    owner: "{{ user.hadoop }}"
+    group: "{{ user.hadoop_group }}"
+
 - name: hive symbolic link
   file:
     src: "{{ dir.install_base }}/{{ version.hive }}"
@@ -27,12 +33,24 @@
     owner: "{{ user.hadoop }}"
     group: "{{ user.hadoop_group }}"
   with_items:
+    - beeline-log4j.properties
+    - hive-env.sh
+    - hive-exec-log4j.properties
+    - hive-log4j.properties
     - hive-site.xml
 
+- name: create /app/hive
+  file: >
+    path={{ dir.app_hive }}
+    state=directory
+    owner={{ user.hadoop }}
+    group={{ user.hadoop_group }}
+    recurse=yes
+
 - name: copy .bashrc
-  copy:
+  template:
     src: .bashrc
-    dest: "/home/{{ user.hadoop }}/.bashrc"
+    dest: /home/{{ user.hadoop }}/.bashrc
     owner: "{{ user.hadoop }}"
     group: "{{ user.hadoop_group }}"
 
@@ -40,3 +58,13 @@
   shell: . /home/{{ user.hadoop }}/.bashrc
   become: yes
   become_user: "{{ user.hadoop }}"
+
+- copy:
+    src: "{{ item }}"
+    dest: "/home/{{ user.hadoop }}"
+    owner: "{{ user.hadoop }}"
+    group: "{{ user.hadoop_group }}"
+  with_items:
+    - employee.create
+    - employee.data
+    - employee.load

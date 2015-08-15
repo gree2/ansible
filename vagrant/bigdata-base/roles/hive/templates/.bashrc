@@ -2,24 +2,25 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
-export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64/jre
+export JAVA_HOME={{ dir.java }}
 
-export HADOOP_PREFIX=/opt/bigdata/hadoop
+export HADOOP_PREFIX={{ dir.hadoop }}
 export HADOOP_COMMON_HOME=$HADOOP_PREFIX
-export HADOOP_CONF_DIR=$HADOOP_PREFIX/etc/hadoop
+export HADOOP_CONF_DIR={{ dir.hadoop_conf }}
 export HADOOP_HDFS_HOME=$HADOOP_PREFIX
 export HADOOP_HOME=$HADOOP_PREFIX
 export HADOOP_MAPRED_HOME=$HADOOP_PREFIX
 export HADOOP_YARN_HOME=$HADOOP_PREFIX
 
-export HIVE_PREFIX=/opt/bigdata/hive
-export HIVE_HOME=$HIVE_PREFIX
-
 export PATH=$PATH:$JAVA_HOME
 export PATH=$PATH:$HADOOP_HOME/bin
 export PATH=$PATH:$HADOOP_HOME/sbin
 
-export PATH=$PATH:$HIVE_HOME/bin
+export HIVE_PREFIX={{ dir.hive }}
+export HIVE_HOME=$HIVE_PREFIX
+export HIVE_CONF_DIR={{ dir.hive_conf }}
+
+export PATH=$PATH:$HIVE_HOME/bin:$HIVE_CONF_DIR
 
 # If not running interactively, don't do anything
 case $- in

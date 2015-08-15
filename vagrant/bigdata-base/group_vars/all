@@ -10,7 +10,8 @@ iface: eth1
 
 dir:
 
-    app_base: /app/hadoop
+    app_hadoop: /app/hadoop
+    app_hive: /app/hive
     
     install_base: /opt/bigdata
 
@@ -21,11 +22,13 @@ dir:
     hive_conf: /opt/bigdata/hive/conf
     hive_lib: /opt/bigdata/hive/lib
 
+    java: /usr/lib/jvm/java-7-openjdk-amd64/jre
+
 conf:
 
     mirrors: mirrors.163.com
 
-    hdfs_port: 9000
+    hdfs_port: 8020
     hdfs_replication: 1
 
     hive_metastore: metastore
